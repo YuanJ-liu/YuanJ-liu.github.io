@@ -25,6 +25,11 @@ jobs:
       - run: pip install zensical
       - run: python scripts/generate_page_metadata.py
       - run: zensical build --clean
+      - name: Verify site output
+        run: |
+          test -f site/index.html
+          echo "site/index.html exists"
+          find site -maxdepth 2 -type f | sort | head -30
       - uses: actions/upload-pages-artifact@v5
         with:
           path: site
