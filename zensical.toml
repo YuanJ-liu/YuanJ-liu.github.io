@@ -1,0 +1,245 @@
+[project]
+site_url = "https://yuanj-liu.github.io/"
+site_name = "YuanJ's note"
+site_description = "数学、计算机科学与人工智能课程笔记"
+site_author = "YuanJ Liu"
+
+copyright = "Copyright &copy; 2026 YuanJ Liu"
+
+repo_url = "https://github.com/YuanJ-liu/YuanJ-liu.github.io"
+repo_name = "YuanJ-liu/YuanJ-liu.github.io"
+# edit_uri = "edit/main/docs/"
+
+nav = [
+  { "首页" = "index.md" },
+  { "数学" = [
+    { "课程索引" = "mathematics/index.md" },
+    { "数学分析 I" = [
+      { "课程首页" = "mathematics/analysis-1/index.md" },
+      { "实数与函数" = "mathematics/analysis-1/real-numbers.md" },
+      { "极限与连续" = "mathematics/analysis-1/limits-continuity.md" },
+      { "微分学" = "mathematics/analysis-1/differentiation.md" },
+      { "积分学" = "mathematics/analysis-1/integration.md" },
+    ] },
+    { "数学分析 II" = [
+      { "课程首页" = "mathematics/analysis-2/index.md" },
+      { "无穷级数" = "mathematics/analysis-2/series.md" },
+      { "多元微分" = "mathematics/analysis-2/multivariable-differentiation.md" },
+      { "重积分" = "mathematics/analysis-2/multiple-integrals.md" },
+      { "曲线与曲面积分" = "mathematics/analysis-2/line-surface-integrals.md" },
+    ] },
+    { "线性代数 I" = [
+      { "课程首页" = "mathematics/linear-algebra-1/index.md" },
+      { "方程组与矩阵" = "mathematics/linear-algebra-1/systems-matrices.md" },
+      { "行列式" = "mathematics/linear-algebra-1/determinants.md" },
+      { "向量空间" = "mathematics/linear-algebra-1/vector-spaces.md" },
+      { "线性映射" = "mathematics/linear-algebra-1/linear-maps.md" },
+    ] },
+    { "线性代数 II" = [
+      { "课程首页" = "mathematics/linear-algebra-2/index.md" },
+      { "特征理论" = "mathematics/linear-algebra-2/eigenvalues.md" },
+      { "Jordan 标准形" = "mathematics/linear-algebra-2/jordan-form.md" },
+      { "内积与谱定理" = "mathematics/linear-algebra-2/inner-product-spectral.md" },
+      { "奇异值分解" = "mathematics/linear-algebra-2/svd.md" },
+    ] },
+  ] },
+  { "计算机理论" = [
+    { "课程索引" = "theory/index.md" },
+    { "离散数学" = [
+      { "课程首页" = "theory/discrete-mathematics/index.md" },
+      { "逻辑与证明" = "theory/discrete-mathematics/logic-proofs.md" },
+      { "集合与关系" = "theory/discrete-mathematics/sets-relations.md" },
+      { "组合计数" = "theory/discrete-mathematics/combinatorics.md" },
+      { "图论基础" = "theory/discrete-mathematics/graph-theory.md" },
+    ] },
+    { "数据结构基础" = [
+      { "课程首页" = "theory/data-structures/index.md" },
+      { "线性结构" = "theory/data-structures/linear-structures.md" },
+      { "树与堆" = "theory/data-structures/trees-heaps.md" },
+      { "散列与并查集" = "theory/data-structures/hashing-disjoint-sets.md" },
+      { "图结构" = "theory/data-structures/graphs.md" },
+    ] },
+    { "高级数据结构与算法分析" = [
+      { "课程首页" = "theory/advanced-algorithms/index.md" },
+      { "算法设计范式" = "theory/advanced-algorithms/design-paradigms.md" },
+      { "高级数据结构" = "theory/advanced-algorithms/advanced-structures.md" },
+      { "图算法与网络流" = "theory/advanced-algorithms/graph-algorithms.md" },
+      { "复杂度与近似" = "theory/advanced-algorithms/complexity-approximation.md" },
+    ] },
+    { "计算理论" = [
+      { "课程首页" = "theory/computation/index.md" },
+      { "有限自动机" = "theory/computation/automata.md" },
+      { "上下文无关语言" = "theory/computation/context-free-languages.md" },
+      { "可计算性" = "theory/computation/computability.md" },
+      { "复杂度理论" = "theory/computation/complexity.md" },
+    ] },
+    { "编译原理" = [
+      { "课程首页" = "theory/compilers/index.md" },
+      { "词法分析" = "theory/compilers/lexing.md" },
+      { "语法分析" = "theory/compilers/parsing.md" },
+      { "语义分析与中间表示" = "theory/compilers/semantics-ir.md" },
+      { "优化与代码生成" = "theory/compilers/optimization-codegen.md" },
+    ] },
+  ] },
+  { "计算机系统" = [
+    { "课程索引" = "systems/index.md" },
+    { "数字逻辑设计" = [
+      { "课程首页" = "systems/digital-logic/index.md" },
+      { "组合逻辑" = "systems/digital-logic/combinational.md" },
+      { "时序逻辑" = "systems/digital-logic/sequential.md" },
+      { "有限状态机" = "systems/digital-logic/fsm.md" },
+      { "硬件描述语言" = "systems/digital-logic/hdl.md" },
+    ] },
+    { "计算机组成" = [
+      { "课程首页" = "systems/computer-organization/index.md" },
+      { "指令集" = "systems/computer-organization/instruction-set.md" },
+      { "数据通路与控制" = "systems/computer-organization/datapath-control.md" },
+      { "流水线" = "systems/computer-organization/pipeline.md" },
+      { "存储与输入输出" = "systems/computer-organization/memory-io.md" },
+    ] },
+    { "计算机体系结构" = [
+      { "课程首页" = "systems/computer-architecture/index.md" },
+      { "性能与指令级并行" = "systems/computer-architecture/performance-ilp.md" },
+      { "预测与乱序执行" = "systems/computer-architecture/prediction-ooo.md" },
+      { "存储层次与一致性" = "systems/computer-architecture/memory-coherence.md" },
+      { "并行体系结构" = "systems/computer-architecture/parallelism.md" },
+    ] },
+    { "操作系统" = [
+      { "课程首页" = "systems/operating-systems/index.md" },
+      { "进程与调度" = "systems/operating-systems/processes.md" },
+      { "并发与同步" = "systems/operating-systems/concurrency.md" },
+      { "虚拟内存" = "systems/operating-systems/virtual-memory.md" },
+      { "文件系统" = "systems/operating-systems/file-systems.md" },
+    ] },
+  ] },
+  { "人工智能" = [
+    { "课程索引" = "artificial-intelligence/index.md" },
+    { "深度学习" = [
+      { "课程首页" = "artificial-intelligence/deep-learning/index.md" },
+      { "神经网络基础" = "artificial-intelligence/deep-learning/foundations.md" },
+      { "训练与优化" = "artificial-intelligence/deep-learning/optimization.md" },
+      { "卷积神经网络" = "artificial-intelligence/deep-learning/cnn.md" },
+      { "序列模型与 Transformer" = "artificial-intelligence/deep-learning/transformers.md" },
+    ] },
+  ] },
+  { "软件与网络" = [
+    { "课程索引" = "software-networking/index.md" },
+    { "计算机网络" = [
+      { "课程首页" = "software-networking/computer-networks/index.md" },
+      { "网络体系与链路层" = "software-networking/computer-networks/architecture-link.md" },
+      { "网络层与路由" = "software-networking/computer-networks/network-routing.md" },
+      { "传输层" = "software-networking/computer-networks/transport.md" },
+      { "应用层与安全" = "software-networking/computer-networks/applications-security.md" },
+    ] },
+    { "数据库系统" = [
+      { "课程首页" = "software-networking/database-systems/index.md" },
+      { "关系模型与 SQL" = "software-networking/database-systems/relational-sql.md" },
+      { "存储与索引" = "software-networking/database-systems/storage-indexes.md" },
+      { "查询处理" = "software-networking/database-systems/query-processing.md" },
+      { "事务与恢复" = "software-networking/database-systems/transactions-recovery.md" },
+    ] },
+  ] },
+]
+
+extra_css = ["stylesheets/extra.css"]
+extra_javascript = [
+  "javascripts/page-metadata.js",
+  "javascripts/extra.js",
+  "javascripts/mathjax.js",
+  "https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js",
+]
+
+[project.theme]
+# variant = "classic"
+# custom_dir = "overrides"
+# favicon = "images/favicon.png"
+language = "zh"
+features = [
+  "announce.dismiss",
+  # "content.action.edit",
+  # "content.action.view",
+  "content.code.annotate",
+  "content.code.copy",
+  "content.code.select",
+  "content.footnote.tooltips",
+  "content.tabs.link",
+  "content.tooltips",
+  # "header.autohide",
+  # "navigation.expand",
+  "navigation.footer",
+  "navigation.indexes",
+  # "navigation.instant.progress",
+  "navigation.path",
+  # "navigation.prune",
+  "navigation.sections",
+  "navigation.tabs",
+  "navigation.tabs.sticky",
+  "navigation.top",
+  "navigation.tracking",
+  "search.highlight",
+  # "toc.follow",
+  # "toc.integrate",
+]
+
+[project.theme.icon]
+logo = "lucide/orbit"
+
+# [project.theme.font]
+# text = "Inter"
+# code = "Jetbrains Mono"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme)"
+toggle.icon = "lucide/sun-moon"
+toggle.name = "Switch to light mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to system preference"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/YuanJ-liu"
+
+# [[project.extra.social]]
+# icon = "fontawesome/brands/mastodon"
+# link = "https://fosstodon.org/@user"
+
+[project.markdown_extensions]
+abbr = {}
+admonition = {}
+attr_list = {}
+def_list = {}
+footnotes = {}
+md_in_html = {}
+toc.permalink = true
+pymdownx.arithmatex.generic = true
+pymdownx.betterem = {}
+pymdownx.caret = {}
+pymdownx.details = {}
+pymdownx.emoji.emoji_generator = "zensical.extensions.emoji.to_svg"
+pymdownx.emoji.emoji_index = "zensical.extensions.emoji.twemoji"
+pymdownx.highlight.anchor_linenums = true
+pymdownx.highlight.line_spans = "__span"
+pymdownx.highlight.pygments_lang_class = true
+pymdownx.inlinehilite = {}
+pymdownx.keys = {}
+pymdownx.magiclink = {}
+pymdownx.mark = {}
+pymdownx.smartsymbols = {}
+# pymdownx.snippets.base_path = "includes"
+pymdownx.superfences.custom_fences = [
+  { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
+]
+pymdownx.tabbed.alternate_style = true
+pymdownx.tabbed.combine_header_slug = true
+pymdownx.tasklist.custom_checkbox = true
+pymdownx.tilde = {}
