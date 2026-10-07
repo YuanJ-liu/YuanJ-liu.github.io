@@ -6,6 +6,15 @@
     let button = document.querySelector(".toc-toggle")
 
     if (!sidebar || sidebar.hasAttribute("hidden")) {
+      document.body.classList.remove("has-secondary-toc")
+      button?.remove()
+      return
+    }
+
+    document.body.classList.add("has-secondary-toc")
+
+    if (matchMedia("(min-width: 76.25em) and (hover: hover)").matches) {
+      document.body.classList.remove("toc-collapsed")
       button?.remove()
       return
     }
@@ -98,26 +107,23 @@
 
   function renderHomeMetadata() {
     const homeCover = document.querySelector(".home-cover")
-    const pageCount = document.querySelector("[data-home-pages]")
-    const updatedAt = document.querySelector("[data-home-updated]")
     document.body.classList.toggle("is-home-page", Boolean(homeCover))
-    if (!pageCount || !updatedAt) return
+    if (!homeCover) return
+  }
 
-    const timestamps = Object.values(window.__PAGE_UPDATED__ ?? {})
-      .map(value => new Date(value))
-      .filter(value => !Number.isNaN(value.getTime()))
+  function restrictFooterNavigation() {
+    const footer = document.querySelector(".md-footer")
+    if (!footer) return
 
-    pageCount.textContent = Object.keys(window.__PAGE_UPDATED__ ?? {}).length.toLocaleString("zh-CN")
+    const parts = location.pathname.split("/").filter(Boolean)
+    const courseRoot = parts.length >= 2 ? `/${parts.slice(0, 2).join("/")}/` : null
 
-    if (timestamps.length) {
-      const newest = new Date(Math.max(...timestamps.map(value => value.getTime())))
-      updatedAt.dateTime = newest.toISOString()
-      updatedAt.textContent = new Intl.DateTimeFormat("zh-CN", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit"
-      }).format(newest)
-    }
+    footer.querySelectorAll(".md-footer__link").forEach(link => {
+      const target = new URL(link.href, location.href)
+      const sameCourse = courseRoot && target.pathname.startsWith(courseRoot)
+      link.toggleAttribute("hidden", !sameCourse)
+    })
+
   }
 
   function renderSiteStatistics() {
@@ -140,12 +146,6 @@
     updatedAt.textContent = Number.isNaN(updated.getTime())
       ? "—"
       : new Intl.DateTimeFormat("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" }).format(updated)
-  }
-
-  function renderHomeCourseMap() {
-    const map = document.querySelector(".home-cover__mesh")
-    if (!map || !matchMedia("(prefers-reduced-motion: reduce)").matches) return
-    map.pauseAnimations?.()
   }
 
   function renderUpdateTimeline() {
@@ -198,7 +198,7 @@
     renderPageStats()
     renderHomeMetadata()
     renderSiteStatistics()
-    renderHomeCourseMap()
+    restrictFooterNavigation()
     renderUpdateTimeline()
   }
 
@@ -229,6 +229,81 @@
         }, 700)
       }
     }, true)
+  }
+
+  function enableHeaderAutoHide() {
+    if (document.documentElement.dataset.headerAutoHideReady) return
+    document.documentElement.dataset.headerAutoHideReady = "true"
+
+    let ticking = false
+
+    const sync = () => {
+      const isHome = document.body.classList.contains("is-home-page")
+      const currentScroll = window.scrollY
+      document.body.classList.toggle("header-hidden", !isHome && currentScroll > 96)
+      ticking = false
+    }
+
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(sync)
+        ticking = true
+      }
+    }, { passive: true })
+
+    window.addEventListener("resize", () => {
+      document.body.classList.remove("header-hidden")
+    }, { passive: true })
+  }
+
+  function enableDesktopSidebarReveal() {
+    if (document.documentElement.dataset.sidebarRevealReady) return
+    document.documentElement.dataset.sidebarRevealReady = "true"
+    if (!matchMedia("(min-width: 76.25em) and (hover: hover)").matches) return
+
+    const sidebarSelector = ".md-sidebar--primary"
+    const close = () => document.body.classList.remove("sidebar-peek")
+    const open = () => document.body.classList.add("sidebar-peek")
+
+    document.addEventListener("pointermove", event => {
+      if (document.body.classList.contains("is-home-page")) return
+      const sidebar = document.querySelector(sidebarSelector)
+      if (!sidebar) return
+      const bounds = sidebar.getBoundingClientRect()
+      const inside = event.clientX >= bounds.left && event.clientX <= bounds.right &&
+        event.clientY >= 0 && event.clientY <= window.innerHeight
+      if (inside) open()
+      else close()
+    }, { passive: true })
+
+    document.addEventListener("focusin", event => {
+      if (event.target.closest?.(sidebarSelector)) open()
+    })
+
+    document.addEventListener("focusout", event => {
+      if (!event.relatedTarget?.closest?.(sidebarSelector)) close()
+    })
+
+    window.addEventListener("resize", close, { passive: true })
+  }
+
+  function enableDesktopTocReveal() {
+    if (document.documentElement.dataset.tocRevealReady) return
+    document.documentElement.dataset.tocRevealReady = "true"
+    if (!matchMedia("(min-width: 76.25em) and (hover: hover)").matches) return
+
+    document.addEventListener("pointermove", event => {
+      const sidebar = document.querySelector(".md-sidebar--secondary")
+      if (!sidebar || sidebar.hasAttribute("hidden")) return
+      const bounds = sidebar.getBoundingClientRect()
+      const inside = event.clientX >= bounds.left && event.clientX <= bounds.right &&
+        event.clientY >= 0 && event.clientY <= window.innerHeight
+      document.body.classList.toggle("toc-peek", inside)
+    }, { passive: true })
+
+    window.addEventListener("resize", () => {
+      document.body.classList.remove("toc-peek")
+    }, { passive: true })
   }
 
   function enableHomeStatsPopover() {
@@ -262,110 +337,11 @@
     })
   }
 
-  function enableHomeCourseMap() {
-    if (document.documentElement.dataset.homeCourseMapReady) return
-    document.documentElement.dataset.homeCourseMapReady = "true"
-
-    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)")
-
-    const hide = () => {
-      const card = document.querySelector("[data-home-course-card]")
-      const map = document.querySelector(".home-cover__mesh")
-      card?.setAttribute("hidden", "")
-      document.querySelectorAll("[data-course-node]").forEach(node => {
-        node.classList.remove("is-active")
-        delete node.dataset.touchArmed
-      })
-      if (!reducedMotion.matches) map?.unpauseAnimations?.()
-    }
-
-    const show = node => {
-      const cover = node.closest(".home-cover")
-      const map = node.closest(".home-cover__mesh")
-      const card = cover?.querySelector("[data-home-course-card]")
-      if (!cover || !map || !card) return
-
-      cover.querySelectorAll("[data-course-node]").forEach(item => {
-        item.classList.toggle("is-active", item === node)
-      })
-      card.querySelector("[data-home-course-category]").textContent = node.dataset.category
-      card.querySelector("[data-home-course-title]").textContent = node.dataset.course
-      card.querySelector("[data-home-course-summary]").textContent = node.dataset.summary
-      card.hidden = false
-      map.pauseAnimations?.()
-
-      requestAnimationFrame(() => {
-        const marker = node.querySelector(".home-course-node__dot")
-        if (!marker || card.hidden) return
-
-        const coverRect = cover.getBoundingClientRect()
-        const markerRect = marker.getBoundingClientRect()
-        const cardRect = card.getBoundingClientRect()
-        const padding = 12
-        const markerX = markerRect.left + markerRect.width / 2 - coverRect.left
-        const markerY = markerRect.top + markerRect.height / 2 - coverRect.top
-        const maximumLeft = Math.max(padding, coverRect.width - cardRect.width - padding)
-        const maximumTop = Math.max(padding, coverRect.height - cardRect.height - padding)
-        const left = Math.min(Math.max(markerX + 12, padding), maximumLeft)
-        const preferredTop = markerY + cardRect.height + 20 > coverRect.height
-          ? markerY - cardRect.height - 12
-          : markerY + 12
-        const top = Math.min(Math.max(preferredTop, padding), maximumTop)
-
-        card.style.left = `${left}px`
-        card.style.top = `${top}px`
-      })
-    }
-
-    document.addEventListener("pointerover", event => {
-      const node = event.target.closest?.("[data-course-node]")
-      if (node && matchMedia("(hover: hover)").matches) show(node)
-    })
-
-    document.addEventListener("pointerout", event => {
-      const node = event.target.closest?.("[data-course-node]")
-      if (!node || !matchMedia("(hover: hover)").matches) return
-      const nextNode = event.relatedTarget?.closest?.("[data-course-node]")
-      if (nextNode === node) return
-      hide()
-    })
-
-    document.addEventListener("focusin", event => {
-      const node = event.target.closest?.("[data-course-node]")
-      if (node) show(node)
-    })
-
-    document.addEventListener("focusout", event => {
-      if (!event.target.closest?.("[data-course-node]")) return
-      if (event.relatedTarget?.closest?.("[data-course-node]")) return
-      hide()
-    })
-
-    document.addEventListener("click", event => {
-      const node = event.target.closest?.("[data-course-node]")
-      const touchFirst = matchMedia("(hover: none)").matches
-
-      if (node && touchFirst && node.dataset.touchArmed !== "true") {
-        event.preventDefault()
-        document.querySelectorAll("[data-course-node]").forEach(item => {
-          delete item.dataset.touchArmed
-        })
-        node.dataset.touchArmed = "true"
-        show(node)
-        return
-      }
-
-      if (!node && !event.target.closest?.("[data-home-course-card]")) hide()
-    })
-
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") hide()
-    })
-  }
-
   enableThemeTransition()
   enableHomeStatsPopover()
-  enableHomeCourseMap()
+  enableHeaderAutoHide()
+  enableDesktopSidebarReveal()
+  enableDesktopTocReveal()
 
   if (typeof document$ !== "undefined") {
     document$.subscribe(renderPageEnhancements)

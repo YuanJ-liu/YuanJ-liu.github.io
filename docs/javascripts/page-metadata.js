@@ -1,5 +1,5 @@
 window.__PAGE_UPDATED__ = {
-  "/": "2026-10-07T18:30:20+08:00",
+  "/": "2026-10-08T02:01:03.729199+08:00",
   "/artificial-intelligence/": "2026-10-07T18:30:20+08:00",
   "/artificial-intelligence/deep-learning/": "2026-10-07T18:30:20+08:00",
   "/artificial-intelligence/deep-learning/cnn/": "2026-10-07T18:30:20+08:00",
@@ -179,6 +179,6 @@ window.__PAGE_TITLES__ = {
 window.__SITE_STATS__ = {
   "pageCount": 87,
   "startedAt": "2026-10-07T00:00:00+08:00",
-  "totalUnits": 10541,
-  "updatedAt": "2026-10-07T18:30:20+08:00"
+  "totalUnits": 9036,
+  "updatedAt": "2026-10-08T02:01:03.729199+08:00"
 }
