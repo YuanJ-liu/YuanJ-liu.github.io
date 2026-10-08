@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" role="img" aria-labelledby="title description">
+  <title id="title">平方函数的 epsilon-delta 图示</title>
+  <desc id="description">图中展示点 a 附近的 delta 输入范围与函数值 L 附近的 epsilon 输出范围。</desc>
+  <style>
+    .axis { stroke: #6b7280; stroke-width: 2; }
+    .guide { stroke: #8b5cf6; stroke-width: 2; stroke-dasharray: 7 6; }
+    .output { stroke: #4f9d78; stroke-width: 2; stroke-dasharray: 7 6; }
+    .curve { fill: none; stroke: #5965c7; stroke-width: 4; stroke-linecap: round; }
+    .delta { fill: #8b5cf6; opacity: .12; }
+    .epsilon { fill: #4f9d78; opacity: .13; }
+    .point { fill: #5965c7; }
+    .label { fill: #4b5563; font: 18px system-ui, sans-serif; }
+    .small { fill: #6b7280; font: 15px system-ui, sans-serif; }
+    @media (prefers-color-scheme: dark) {
+      .axis { stroke: #9ca3af; }
+      .label { fill: #e5e7eb; }
+      .small { fill: #c4c9d2; }
+      .curve { stroke: #9ca7ff; }
+      .point { fill: #9ca7ff; }
+    }
+  </style>
+  <rect class="epsilon" x="70" y="92" width="600" height="92" rx="8"/>
+  <rect class="delta" x="318" y="34" width="104" height="238" rx="8"/>
+  <line class="axis" x1="70" y1="272" x2="680" y2="272"/>
+  <line class="axis" x1="92" y1="292" x2="92" y2="28"/>
+  <path class="curve" d="M120 245 C210 232 278 207 340 168 S474 74 626 46"/>
+  <line class="guide" x1="318" y1="34" x2="318" y2="278"/>
+  <line class="guide" x1="422" y1="34" x2="422" y2="278"/>
+  <line class="output" x1="70" y1="92" x2="670" y2="92"/>
+  <line class="output" x1="70" y1="184" x2="670" y2="184"/>
+  <circle class="point" cx="370" cy="148" r="7"/>
+  <text class="label" x="360" y="302">a</text>
+  <text class="label" x="44" y="154">L</text>
+  <text class="small" x="306" y="28">a − δ</text>
+  <text class="small" x="408" y="28">a + δ</text>
+  <text class="small" x="604" y="84">L + ε</text>
+  <text class="small" x="604" y="207">L − ε</text>
+</svg>

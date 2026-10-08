@@ -152,7 +152,7 @@ extra_javascript = [
 [project.theme]
 # variant = "classic"
 # custom_dir = "overrides"
-# favicon = "images/favicon.png"
+favicon = "images/favicon.svg"
 language = "zh"
 features = [
   "announce.dismiss",
@@ -182,7 +182,7 @@ features = [
 ]
 
 [project.theme.icon]
-logo = "lucide/orbit"
+logo = "lucide/feather"
 
 # [project.theme.font]
 # text = "Inter"

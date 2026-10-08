@@ -94,6 +94,53 @@
 
     所以 \(\lim_{x\to a}x^2=a^2=f(a)\)，平方函数在 (a) 点连续。
 
+## 内容组件示例
+
+### 代码块
+
+下面的代码把证明中“选择 \(\delta\)”的过程写成一个简单函数。代码块会自动提供语法高亮、行号和复制按钮。
+
+```python title="为平方函数选择 δ" linenums="1"
+def choose_delta(a: float, epsilon: float) -> float:
+    """Return a δ that guarantees |x² - a²| < ε."""
+    if epsilon <= 0:
+        raise ValueError("epsilon must be positive")
+
+    return min(1.0, epsilon / (2 * abs(a) + 1))
+```
+
+### 图片
+
+图片可以放在 `docs/images/` 中，再使用普通 Markdown 图片语法插入。SVG、PNG、JPG 和 WebP 都可以。
+
+![平方函数的 epsilon-delta 图示](../../../images/epsilon-delta.svg)
+<p class="diagram-caption">紫色区域表示输入范围 \(|x-a|&lt;\delta\)，绿色区域表示目标误差 \(|f(x)-L|&lt;\varepsilon\)。</p>
+
+### 离散步骤标签页
+
+点击不同标签即可在几个关键状态之间切换。以后可以把每一帧中的示意条替换成对应的手绘图片。
+
+=== "第 1 帧 · 给定 ε"
+
+    <span class="is-active">给定 ε</span> <span>选择 δ</span> <span>验证误差</span>
+    {: .discrete-frames }
+
+    先确定允许的函数值误差 \(\varepsilon\)，也就是证明需要达到的目标。
+
+=== "第 2 帧 · 选择 δ"
+
+    <span>给定 ε</span> <span class="is-active">选择 δ</span> <span>验证误差</span>
+    {: .discrete-frames }
+
+    根据 \(a\) 和 \(\varepsilon\) 选择输入范围 \(\delta\)，把不可控的 \(|x+a|\) 限制住。
+
+=== "第 3 帧 · 验证"
+
+    <span>给定 ε</span> <span>选择 δ</span> <span class="is-active">验证误差</span>
+    {: .discrete-frames }
+
+    最后代回不等式，验证 \(|x-a|&lt;\delta\) 确实能够推出 \(|x^2-a^2|&lt;\varepsilon\)。
+
 ## 小结
 
 - \(\varepsilon\) 表示目标误差，\(\delta\) 表示允许的输入范围。

@@ -3,6 +3,11 @@
   --md-accent-fg-color: #7c4dff;
 }
 
+.md-typeset strong {
+  color: color-mix(in srgb, var(--md-accent-fg-color) 58%, var(--md-default-fg-color));
+  font-weight: 650;
+}
+
 .home-cover {
   position: relative;
   display: flex;
@@ -267,9 +272,15 @@ button.home-cover__link {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem 0.7rem;
-  margin: -0.4rem 0 1.5rem;
+  margin: -0.65rem 0 0.95rem;
   color: var(--md-default-fg-color--lighter);
   font-size: 0.7rem;
+}
+
+.page-stats > span {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
 }
 
 .page-stats span + span::before {
@@ -279,13 +290,11 @@ button.home-cover__link {
 }
 
 .page-stats__icon {
-  display: inline-block;
-  width: 1.15em;
+  width: 1em;
+  height: 1em;
+  flex: 0 0 auto;
   margin-right: 0.3rem;
   color: var(--md-default-fg-color--light);
-  font-family: "Segoe UI Symbol", "Apple Symbols", sans-serif;
-  font-size: 0.95em;
-  text-align: center;
 }
 
 .md-typeset .index-block {
@@ -309,8 +318,91 @@ button.home-cover__link {
 }
 
 .md-typeset .index-block .simple-index {
-  margin-top: 0;
-  margin-bottom: 0;
+  margin: 0;
+}
+
+.md-typeset .simple-index {
+  padding-left: 0;
+  margin-right: 0;
+  margin-left: 0;
+  list-style: none;
+}
+
+.md-typeset .simple-index > li {
+  position: relative;
+  display: block;
+  padding-left: 1rem;
+  margin: 0.6rem 0;
+}
+
+.md-typeset .simple-index > li::before {
+  position: absolute;
+  top: 0.65em;
+  left: 0;
+  width: 0.28rem;
+  height: 0.28rem;
+  border-radius: 50%;
+  background: var(--md-default-fg-color--lightest);
+  content: "";
+}
+
+.md-typeset .simple-index > li > a {
+  display: block;
+  color: var(--md-default-fg-color);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.md-typeset .simple-index > li > a:hover,
+.md-typeset .simple-index > li > a:focus-visible {
+  color: var(--md-typeset-a-color);
+  text-decoration: none;
+}
+
+.simple-index__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  margin-top: 0.08rem;
+  color: var(--md-default-fg-color--lighter);
+  font-size: 0.62rem;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.simple-index__difficulty {
+  color: var(--md-default-fg-color--light);
+  letter-spacing: 0.04em;
+}
+
+.simple-index__units {
+  color: var(--md-default-fg-color--lighter);
+}
+
+.simple-index__status {
+  padding: 0.06rem 0.35rem;
+  border-radius: 999px;
+}
+
+.simple-index__status--complete {
+  background: color-mix(in srgb, #3f9b6b 17%, transparent);
+  color: color-mix(in srgb, #2f8158 88%, var(--md-default-fg-color));
+}
+
+.simple-index__status--wip {
+  background: color-mix(in srgb, #cf5c5c 17%, transparent);
+  color: color-mix(in srgb, #b74747 88%, var(--md-default-fg-color));
+}
+
+@media screen and (max-width: 45em) {
+  .md-typeset .simple-index > li {
+    margin: 0.65rem 0;
+  }
+
+  .simple-index__meta {
+    font-size: 0.6rem;
+  }
 }
 
 .md-typeset .reference-list {
@@ -324,14 +416,19 @@ button.home-cover__link {
 }
 
 .md-typeset .admonition.concept {
-  border-color: color-mix(in srgb, var(--md-accent-fg-color) 42%, transparent);
-  background: color-mix(in srgb, var(--md-accent-fg-color) 4%, var(--md-default-bg-color));
+  padding-top: 0.45rem;
+  border: 1px solid color-mix(in srgb, var(--md-accent-fg-color) 58%, var(--md-default-fg-color--lightest));
+  border-left-width: 3px;
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, var(--md-accent-fg-color) 9%, var(--md-default-bg-color));
+  box-shadow: none;
 }
 
 .md-typeset .concept > .admonition-title {
-  padding-left: 0.8rem;
+  padding: 0;
+  margin: 0 0 0.4rem;
   color: var(--md-default-fg-color);
-  background: color-mix(in srgb, var(--md-accent-fg-color) 10%, var(--md-default-bg-color));
+  background: transparent;
 }
 
 .md-typeset .concept > .admonition-title::before {
@@ -339,18 +436,46 @@ button.home-cover__link {
 }
 
 .md-typeset details.fold {
-  border-color: color-mix(in srgb, var(--md-default-fg-color) 14%, transparent);
-  background: color-mix(in srgb, var(--md-default-fg-color) 2.5%, var(--md-default-bg-color));
+  padding-top: 0.45rem;
+  border: 1px solid color-mix(in srgb, var(--md-default-fg-color) 28%, transparent);
+  border-left-width: 3px;
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, var(--md-default-fg-color) 7%, var(--md-default-bg-color));
+  box-shadow: none;
 }
 
 .md-typeset .fold > summary {
-  padding-left: 0.8rem;
-  color: var(--md-default-fg-color--light);
-  background: color-mix(in srgb, var(--md-default-fg-color) 6%, var(--md-default-bg-color));
+  padding: 0 1.4rem 0 0;
+  margin: 0;
+  color: var(--md-default-fg-color);
+  background: transparent;
+}
+
+.md-typeset .fold[open] > summary {
+  margin-bottom: 0.4rem;
 }
 
 .md-typeset .fold > summary::before {
   display: none;
+}
+
+.page-comments {
+  padding-top: 1.4rem;
+  margin-top: 2.6rem;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.md-typeset .page-comments > h2 {
+  margin-top: 0;
+  margin-bottom: 0.35rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.md-typeset .page-comments__description {
+  margin: 0 0 1rem;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.72rem;
 }
 
 .md-typeset .diagram-caption {
@@ -359,6 +484,40 @@ button.home-cover__link {
   font-size: 0.72rem;
   line-height: 1.55;
   text-align: center;
+}
+
+.discrete-frames {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin: 0.7rem 0;
+}
+
+.discrete-frames span {
+  padding: 0.55rem 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--md-default-fg-color) 14%, transparent);
+  border-radius: 0.4rem;
+  color: var(--md-default-fg-color--lighter);
+  background: color-mix(in srgb, var(--md-default-fg-color) 3%, var(--md-default-bg-color));
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.discrete-frames span.is-active {
+  border-color: color-mix(in srgb, var(--md-accent-fg-color) 55%, transparent);
+  color: var(--md-default-fg-color);
+  background: color-mix(in srgb, var(--md-accent-fg-color) 11%, var(--md-default-bg-color));
+}
+
+@media screen and (max-width: 30em) {
+  .discrete-frames {
+    gap: 0.25rem;
+  }
+
+  .discrete-frames span {
+    padding: 0.45rem 0.2rem;
+    font-size: 0.62rem;
+  }
 }
 
 .pipeline-snapshot {

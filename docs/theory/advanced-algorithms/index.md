@@ -8,7 +8,7 @@ hide: [toc]
 <section class="index-block" markdown>
 <p class="index-block__title">概要</p>
 
-系统学习算法设计范式、严格分析与高级数据结构。
+系统学习**算法设计范式**、**严格分析**与**高级数据结构**。
 
 **前置课程：** [数据结构基础](../data-structures/) · [离散数学](../discrete-mathematics/)
 

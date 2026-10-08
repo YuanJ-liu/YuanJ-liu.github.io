@@ -67,6 +67,7 @@ def generate() -> None:
         for source in sources
     }
     titles = {route_for(source): page_title(source) for source in sources}
+    page_units = {route_for(source): count_units(source) for source in sources}
     newest = (
         max(metadata.values(), key=datetime.fromisoformat)
         if metadata
@@ -85,6 +86,11 @@ def generate() -> None:
         sort_keys=True,
     ) + "\nwindow.__PAGE_TITLES__ = " + json.dumps(
         titles,
+        ensure_ascii=False,
+        indent=2,
+        sort_keys=True,
+    ) + "\nwindow.__PAGE_UNITS__ = " + json.dumps(
+        page_units,
         ensure_ascii=False,
         indent=2,
         sort_keys=True,

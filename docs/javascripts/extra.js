@@ -62,12 +62,6 @@
     const hanCharacters = text.match(/\p{Script=Han}/gu)?.length ?? 0
     const latinWords = text.match(/[A-Za-z0-9]+(?:['’-][A-Za-z0-9]+)*/g)?.length ?? 0
     const totalUnits = hanCharacters + latinWords
-    const codeBlocks = content.querySelectorAll("pre").length
-    const figures = content.querySelectorAll(".mermaid, img, .pipeline-snapshot").length
-    const readingMinutes = Math.max(
-      2,
-      Math.ceil(hanCharacters / 120 + latinWords / 80 + codeBlocks * 2 + figures * 1.5)
-    )
 
     const pagePath = location.pathname.endsWith("/") ? location.pathname : `${location.pathname}/`
     const sourceTimestamp = window.__PAGE_UPDATED__?.[pagePath]
@@ -85,24 +79,152 @@
     stats.className = "page-stats"
     stats.setAttribute("aria-label", "章节阅读信息")
 
+    const icons = {
+      words: [
+        ["path", { d: "M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" }],
+        ["path", { d: "m15 5 4 4" }]
+      ],
+      updated: [
+        ["circle", { cx: "12", cy: "12", r: "9" }],
+        ["path", { d: "M12 7v5l3 2" }]
+      ]
+    }
+
+    const createIcon = elements => {
+      const namespace = "http://www.w3.org/2000/svg"
+      const icon = document.createElementNS(namespace, "svg")
+      icon.classList.add("page-stats__icon")
+      icon.setAttribute("viewBox", "0 0 24 24")
+      icon.setAttribute("fill", "none")
+      icon.setAttribute("stroke", "currentColor")
+      icon.setAttribute("stroke-width", "2")
+      icon.setAttribute("stroke-linecap", "round")
+      icon.setAttribute("stroke-linejoin", "round")
+      icon.setAttribute("aria-hidden", "true")
+
+      for (const [tag, attributes] of elements) {
+        const element = document.createElementNS(namespace, tag)
+        for (const [name, value] of Object.entries(attributes)) element.setAttribute(name, value)
+        icon.append(element)
+      }
+
+      return icon
+    }
+
     const items = [
-      { icon: "📝", text: `约 ${totalUnits.toLocaleString("zh-CN")} 字` },
-      { icon: "⌛", text: `预计 ${readingMinutes} 分钟` }
+      { icon: icons.words, text: `约 ${totalUnits.toLocaleString("zh-CN")} 字` }
     ]
 
-    if (formattedTimestamp) items.push({ icon: "◷", text: `更新于 ${formattedTimestamp}` })
+    if (formattedTimestamp) items.push({ icon: icons.updated, text: `更新于 ${formattedTimestamp}` })
 
     for (const item of items) {
       const span = document.createElement("span")
-      const icon = document.createElement("span")
-      icon.className = "page-stats__icon"
-      icon.setAttribute("aria-hidden", "true")
-      icon.textContent = item.icon
-      span.append(icon, document.createTextNode(item.text))
+      span.append(createIcon(item.icon), document.createTextNode(item.text))
       stats.append(span)
     }
 
     heading.insertAdjacentElement("afterend", stats)
+  }
+
+  function renderIndexMetadata() {
+    document.querySelectorAll(".simple-index").forEach(list => {
+      list.querySelectorAll(":scope > li").forEach((item, index) => {
+        const link = item.querySelector(":scope > a")
+        if (!link || item.querySelector(":scope > .simple-index__meta")) return
+
+        const difficulty = Math.min(5, Math.max(1, Number(item.dataset.difficulty) || Math.min(5, index + 2)))
+        const status = item.dataset.status === "complete" || item.dataset.status === "wip"
+          ? item.dataset.status
+          : index % 3 === 0 ? "complete" : "wip"
+        const statusText = status === "complete" ? "完善" : "施工"
+        const metadata = document.createElement("span")
+        metadata.className = "simple-index__meta"
+
+        const difficultyLabel = document.createElement("span")
+        difficultyLabel.className = "simple-index__difficulty"
+        difficultyLabel.textContent = `参考难度 ${"★".repeat(difficulty)}${"☆".repeat(5 - difficulty)}`
+
+        const targetPath = new URL(link.href, location.href).pathname
+        const targetRoute = targetPath.endsWith("/") ? targetPath : `${targetPath}/`
+        const units = window.__PAGE_UNITS__?.[targetRoute]
+        const unitsLabel = document.createElement("span")
+        unitsLabel.className = "simple-index__units"
+        unitsLabel.textContent = Number.isFinite(units)
+          ? `约 ${units.toLocaleString("zh-CN")} 字`
+          : "约 — 字"
+        metadata.setAttribute(
+          "aria-label",
+          `参考难度 ${difficulty} 星，${unitsLabel.textContent}，状态 ${statusText}`
+        )
+
+        const statusLabel = document.createElement("span")
+        statusLabel.className = `simple-index__status simple-index__status--${status}`
+        statusLabel.textContent = statusText
+
+        metadata.append(difficultyLabel, unitsLabel, statusLabel)
+        item.append(metadata)
+      })
+    })
+  }
+
+  function giscusTheme() {
+    return document.body.dataset.mdColorScheme === "slate" ? "dark" : "light"
+  }
+
+  function syncGiscusTheme() {
+    const frame = document.querySelector("iframe.giscus-frame")
+    frame?.contentWindow?.postMessage({
+      giscus: { setConfig: { theme: giscusTheme() } }
+    }, "https://giscus.app")
+  }
+
+  function renderComments() {
+    const content = document.querySelector(".md-content__inner")
+    const sidebar = document.querySelector(".md-sidebar--secondary")
+    const existing = document.querySelector(".page-comments")
+    const isChapter = content && sidebar && !sidebar.hasAttribute("hidden")
+
+    if (!isChapter) {
+      existing?.remove()
+      return
+    }
+    if (existing) return
+
+    const section = document.createElement("section")
+    section.className = "page-comments"
+    section.setAttribute("aria-labelledby", "page-comments-title")
+
+    const heading = document.createElement("h2")
+    heading.id = "page-comments-title"
+    heading.textContent = "讨论"
+
+    const description = document.createElement("p")
+    description.className = "page-comments__description"
+    description.textContent = "发现错误或有补充建议，可以使用 GitHub 账号在这里留言！"
+
+    const host = document.createElement("div")
+    host.className = "giscus"
+
+    const script = document.createElement("script")
+    script.src = "https://giscus.app/client.js"
+    script.async = true
+    script.crossOrigin = "anonymous"
+    script.dataset.repo = "YuanJ-liu/YuanJ-liu.github.io"
+    script.dataset.repoId = "R_kgDOU_XYTQ"
+    script.dataset.category = "General"
+    script.dataset.categoryId = "DIC_kwDOU_XYTc4DHUlP"
+    script.dataset.mapping = "pathname"
+    script.dataset.strict = "1"
+    script.dataset.reactionsEnabled = "1"
+    script.dataset.emitMetadata = "0"
+    script.dataset.inputPosition = "top"
+    script.dataset.theme = giscusTheme()
+    script.dataset.lang = "zh-CN"
+    script.dataset.loading = "lazy"
+
+    host.append(script)
+    section.append(heading, description, host)
+    content.append(section)
   }
 
   function renderHomeMetadata() {
@@ -196,6 +318,8 @@
   function renderPageEnhancements() {
     renderTocToggle()
     renderPageStats()
+    renderIndexMetadata()
+    renderComments()
     renderHomeMetadata()
     renderSiteStatistics()
     restrictFooterNavigation()
@@ -259,14 +383,17 @@
   function enableDesktopSidebarReveal() {
     if (document.documentElement.dataset.sidebarRevealReady) return
     document.documentElement.dataset.sidebarRevealReady = "true"
-    if (!matchMedia("(min-width: 76.25em) and (hover: hover)").matches) return
 
     const sidebarSelector = ".md-sidebar--primary"
+    const desktopHover = matchMedia("(min-width: 76.25em) and (hover: hover)")
     const close = () => document.body.classList.remove("sidebar-peek")
     const open = () => document.body.classList.add("sidebar-peek")
 
     document.addEventListener("pointermove", event => {
-      if (document.body.classList.contains("is-home-page")) return
+      if (!desktopHover.matches || document.body.classList.contains("is-home-page")) {
+        close()
+        return
+      }
       const sidebar = document.querySelector(sidebarSelector)
       if (!sidebar) return
       const bounds = sidebar.getBoundingClientRect()
@@ -277,7 +404,7 @@
     }, { passive: true })
 
     document.addEventListener("focusin", event => {
-      if (event.target.closest?.(sidebarSelector)) open()
+      if (desktopHover.matches && event.target.closest?.(sidebarSelector)) open()
     })
 
     document.addEventListener("focusout", event => {
@@ -285,14 +412,21 @@
     })
 
     window.addEventListener("resize", close, { passive: true })
+    desktopHover.addEventListener("change", close)
   }
 
   function enableDesktopTocReveal() {
     if (document.documentElement.dataset.tocRevealReady) return
     document.documentElement.dataset.tocRevealReady = "true"
-    if (!matchMedia("(min-width: 76.25em) and (hover: hover)").matches) return
+
+    const desktopHover = matchMedia("(min-width: 76.25em) and (hover: hover)")
+    const close = () => document.body.classList.remove("toc-peek")
 
     document.addEventListener("pointermove", event => {
+      if (!desktopHover.matches) {
+        close()
+        return
+      }
       const sidebar = document.querySelector(".md-sidebar--secondary")
       if (!sidebar || sidebar.hasAttribute("hidden")) return
       const bounds = sidebar.getBoundingClientRect()
@@ -301,9 +435,8 @@
       document.body.classList.toggle("toc-peek", inside)
     }, { passive: true })
 
-    window.addEventListener("resize", () => {
-      document.body.classList.remove("toc-peek")
-    }, { passive: true })
+    window.addEventListener("resize", close, { passive: true })
+    desktopHover.addEventListener("change", close)
   }
 
   function enableHomeStatsPopover() {
@@ -337,11 +470,22 @@
     })
   }
 
+  function enableGiscusThemeSync() {
+    if (document.documentElement.dataset.giscusThemeReady) return
+    document.documentElement.dataset.giscusThemeReady = "true"
+
+    new MutationObserver(syncGiscusTheme).observe(document.body, {
+      attributes: true,
+      attributeFilter: ["data-md-color-scheme"]
+    })
+  }
+
   enableThemeTransition()
   enableHomeStatsPopover()
   enableHeaderAutoHide()
   enableDesktopSidebarReveal()
   enableDesktopTocReveal()
+  enableGiscusThemeSync()
 
   if (typeof document$ !== "undefined") {
     document$.subscribe(renderPageEnhancements)
