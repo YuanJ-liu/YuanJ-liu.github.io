@@ -17,11 +17,11 @@ hide:
 <p class="index-block__title">目录</p>
 
 <ul class="simple-index">
-  <li><a href="discrete-mathematics/">离散数学</a></li>
-  <li><a href="data-structures/">数据结构基础</a></li>
-  <li><a href="advanced-algorithms/">高级数据结构与算法分析</a></li>
-  <li><a href="computation/">计算理论</a></li>
-  <li><a href="compilers/">编译原理</a></li>
+  <li data-difficulty="3" data-status="complete"><a href="discrete-mathematics/">离散数学</a></li>
+  <li data-difficulty="3" data-status="complete"><a href="data-structures/">数据结构基础</a></li>
+  <li data-difficulty="4" data-status="wip"><a href="advanced-algorithms/">高级数据结构与算法分析</a></li>
+  <li data-difficulty="4" data-status="wip"><a href="computation/">计算理论</a></li>
+  <li data-difficulty="4" data-status="wip"><a href="compilers/">编译原理</a></li>
 </ul>
 
 </section>

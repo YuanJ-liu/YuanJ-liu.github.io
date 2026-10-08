@@ -85,10 +85,13 @@ nav = [
     { "课程索引" = "systems/index.md" },
     { "数字逻辑设计" = [
       { "课程首页" = "systems/digital-logic/index.md" },
-      { "组合逻辑" = "systems/digital-logic/combinational.md" },
-      { "时序逻辑" = "systems/digital-logic/sequential.md" },
-      { "有限状态机" = "systems/digital-logic/fsm.md" },
-      { "硬件描述语言" = "systems/digital-logic/hdl.md" },
+      { "Chap 1: Digital System and Information" = "systems/digital-logic/chap1.md" },
+      { "Chap 2: Combinational Logic Circuit" = "systems/digital-logic/chap2.md" },
+      { "Chap 3: Combinational Logic Circuit" = "systems/digital-logic/chap3.md" },
+      { "Chap 4: Sequential Circuit" = "systems/digital-logic/chap4.md" },
+      { "Chap 5: Digital HardWare Implementation" = "systems/digital-logic/chap5.md" },
+      { "Chap 6: Registers and Register Transfers" = "systems/digital-logic/chap6.md" },
+      { "Chap 7: Memory Basics" = "systems/digital-logic/chap7.md" },
     ] },
     { "计算机组成" = [
       { "课程首页" = "systems/computer-organization/index.md" },
