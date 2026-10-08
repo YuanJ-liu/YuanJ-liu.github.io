@@ -54,10 +54,10 @@ nav = [
     ] },
     { "数据结构基础" = [
       { "课程首页" = "theory/data-structures/index.md" },
-      { "线性结构" = "theory/data-structures/linear-structures.md" },
-      { "树与堆" = "theory/data-structures/trees-heaps.md" },
-      { "散列与并查集" = "theory/data-structures/hashing-disjoint-sets.md" },
-      { "图结构" = "theory/data-structures/graphs.md" },
+      { "线性结构" = "theory/data-structures/chap1.md" },
+      { "树与堆" = "theory/data-structures/chap2.md" },
+      { "散列与并查集" = "theory/data-structures/chap3.md" },
+      { "图结构" = "theory/data-structures/chap4.md" },
     ] },
     { "高级数据结构与算法分析" = [
       { "课程首页" = "theory/advanced-algorithms/index.md" },

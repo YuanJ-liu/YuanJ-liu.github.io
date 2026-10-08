@@ -127,6 +127,8 @@
   }
 
   function renderIndexMetadata() {
+    let hasMissingUnits = false
+
     document.querySelectorAll(".simple-index").forEach(list => {
       list.querySelectorAll(":scope > li").forEach((item, index) => {
         const link = item.querySelector(":scope > a")
@@ -147,6 +149,7 @@
         const targetPath = new URL(link.href, location.href).pathname
         const targetRoute = targetPath.endsWith("/") ? targetPath : `${targetPath}/`
         const units = window.__PAGE_UNITS__?.[targetRoute]
+        if (!Number.isFinite(units)) hasMissingUnits = true
         const unitsLabel = document.createElement("span")
         unitsLabel.className = "simple-index__units"
         unitsLabel.textContent = Number.isFinite(units)
@@ -165,6 +168,33 @@
         item.append(metadata)
       })
     })
+
+    if (hasMissingUnits) refreshPageMetadata()
+  }
+
+  function refreshPageMetadata() {
+    if (document.documentElement.dataset.pageMetadataRefreshing) return
+    document.documentElement.dataset.pageMetadataRefreshing = "true"
+
+    const script = document.createElement("script")
+    const metadataUrl = new URL("/javascripts/page-metadata.js", location.origin)
+    metadataUrl.searchParams.set("v", Date.now().toString())
+    script.src = metadataUrl.href
+
+    script.onload = () => {
+      document.querySelectorAll(".simple-index__meta").forEach(item => item.remove())
+      renderIndexMetadata()
+      renderSiteStatistics()
+      renderUpdateTimeline()
+      script.remove()
+    }
+
+    script.onerror = () => {
+      delete document.documentElement.dataset.pageMetadataRefreshing
+      script.remove()
+    }
+
+    document.head.append(script)
   }
 
   function giscusTheme() {
